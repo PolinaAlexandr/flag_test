@@ -1,3 +1,6 @@
+import argparse
+
+
 def add_border(line: str) -> str:
     return f"#{line}#"
 
@@ -20,7 +23,7 @@ def construct_line(line_number: int, n: int) -> str:
     return add_border(line)
 
 
-def flag(n: int) -> str:
+def flag(n: int) -> str: 
     flag_half: str = '\n'.join(
         construct_line(line_number, n)
         for line_number in range(n)
@@ -35,4 +38,21 @@ def flag(n: int) -> str:
     return flag_with_borders
 
 
-print(flag(4))
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    dimension_arg = parser.add_argument(
+        'dimension',
+        type=int,
+        help='The dimension of the drawn flag. Should be an even number.'
+    )
+    try:
+        parsed_args = parser.parse_args() 
+        dimension: int = parsed_args.dimension
+        if dimension % 2 != 0:
+            raise argparse.ArgumentError(
+                dimension_arg,
+                'The value of the dimention should be a an even number.'
+            )
+        print(flag(dimension))
+    except argparse.ArgumentError as ex:
+        print(ex)
